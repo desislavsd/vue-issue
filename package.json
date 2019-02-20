@@ -1,14 +1,36 @@
 {
-  "name": "vue-modals",
-  "version": "0.1.0",
-  "private": true,
+  "name": "@desislavsd/vue-issue",
+  "description": "Vue services and components to deal with modals, toasts and like.",
+  "author": "desislavsd",
+  "main": "./dist/vue-issue.common.js",
+  "browser": "./dist/vue-issue.umd.min.js",
+  "files": [
+    "dist/*",
+    "src/*",
+    "*.json",
+    "*.js",
+    "*.md"
+  ],
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/desislavsd/vue-issue.git"
+  },
+  "bugs": {
+    "url": "https://github.com/desislavsd/vue-issue/issues"
+  },
+  "homepage": "https://github.com/desislavsd/vue-issue#readme",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-lib": "vue-cli-service build --target lib --name vue-issue ./src/plugins/issue/index.js",
+    "publish": "npm version patch && npm publish --access public",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "vue": "^2.5.22"
+    "vue": "^2.6.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.0",
@@ -17,6 +39,8 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
     "vue-template-compiler": "^2.5.21"
   },
   "eslintConfig": {
