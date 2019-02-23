@@ -12,7 +12,7 @@
 
 		<footer>
 			<button v-if="!flags.alert && opts.reject" tabindex="0" @click="$emit(rejectEvent, data)">{{ opts.reject }}</button>
-			<button tabindex="0" @click="flags.model ? $refs.submit.click() : $emit(resolveEvent, data)">{{ opts.resolve }}</button>
+			<button tabindex="0" @click="flags.prompt ? $refs.submit.click() : $emit(resolveEvent, data)">{{ opts.resolve }}</button>
 		</footer>
 
 	</article>
@@ -45,7 +45,8 @@ export default {
 			let props = clear(this.$props),
 				opts = clear({...this.$modal.options.dialog, ...props});
             
-            opts.type = opts.type || ( opts.model ? 'prompt' : props.reject ? 'confirm' : 'alert' )
+			opts.type = ['alert', 'confirm', 'prompt'].find( e => e == opts.type)
+				|| ( opts.model ? 'prompt' : props.reject ? 'confirm' : 'alert' )
 
 			return opts
         },
@@ -54,7 +55,6 @@ export default {
                 type = {[opts.type]: true};
 
             return {
-                model: 'model' in opts,
                 message: this.message || !type.prompt && opts.message,
                 ...type,
             }

@@ -5,7 +5,7 @@ The idea is to represent all mentioned obejcts as an __Issue__. An Issue is an i
 
 ## Usage
 ```shell
-$ npm install vue-issue
+$ npm install @desislavsd/vue-issue
 ```
 
 ```javascript
