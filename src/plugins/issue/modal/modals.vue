@@ -1,5 +1,5 @@
 <template>
-  <transition-group name="modal" tag="div" v-if="$modal">
+  <transition-group :name="$modal.options.animation || 'modal'" tag="div" v-if="$modal">
     <component v-for="modal in validModals" :is="modal.data.layout" :key="modal.id" :modal="modal" v-show="modal.opened">
       <component :is="modal.data.component" v-bind="modal.data.props" v-on="modal.data.listeners" :modal="modal"
         @[resolveEvent]="modal.resolve($event)" 

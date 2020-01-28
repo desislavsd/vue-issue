@@ -1,5 +1,7 @@
 import Issue from '../Issue'
 
+class VueModalError extends Error {}
+
 class Modal extends Issue {
     
     get name(){
@@ -31,7 +33,7 @@ class Modal extends Issue {
         try {
             return this.get(name).open(...args)
         } catch (ex){
-            throw new Error(`[VueModal]: Modal called '${name}' doesn't exist!`);
+            throw new VueModalError(`[VueModal]: Modal called '${name}' doesn't exist!`);
         }
     }
 
@@ -46,10 +48,10 @@ class Modal extends Issue {
         if(typeof name == 'object') 
             return Object.keys(name).forEach( key => this.reg(key, name[key])), this;
 
-        if(!name) throw new Error(`Parameter "name" is required when registering a predefined modal!`)
+        if (!name) throw new VueModalError(`Parameter "name" is required when registering a predefined modal!`)
 
         this[name] = (...args) => {
-            return this.open({defaults, ...args})
+            return this.open(defaults, ...args)
         }
         
         return this;

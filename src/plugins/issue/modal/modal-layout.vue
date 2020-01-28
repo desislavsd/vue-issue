@@ -56,6 +56,8 @@ export default {
     &.modal-full
       .modal-body
         width 100%
+      .modal-content
+        min-height 100vh
     &.modal-right
       justify-content flex-end
       .modal-body
@@ -76,6 +78,7 @@ export default {
       padding: 3em
       overflow: hidden
       text-align initial
+      box-sizing border-box
     .modal-close
       position absolute 
       top 0

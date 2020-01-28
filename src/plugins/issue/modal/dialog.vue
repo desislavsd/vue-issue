@@ -43,10 +43,12 @@ export default {
 		opts(){
             
 			let props = clear(this.$props),
+				noProps = !Object.keys(props).length,
 				opts = clear({...this.$modal.options.dialog, ...props});
-            
+
+			
 			opts.type = ['alert', 'confirm', 'prompt'].find( e => e == opts.type)
-				|| ( opts.model ? 'prompt' : props.reject ? 'confirm' : 'alert' )
+				|| ( opts.model ? 'prompt' : props.reject || noProps ? 'confirm' : 'alert' )
 
 			return opts
         },

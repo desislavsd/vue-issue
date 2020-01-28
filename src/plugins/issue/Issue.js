@@ -1,21 +1,20 @@
 
 let extend = Object.assign;
 
-class Issue {
+export default class Issue {
 
 	constructor() {
-
-		// get the store of all created instances
-		let store = this.constructor.instances = this.constructor.instances || [],
+		
+		let store = this.constructor.instances = this.constructor.instances || [], // get the store of all created instances
 			id = this.constructor.index = (this.constructor.index || 0) + 1;
 
-		extend(this, {
+		Object.assign(this, {
 			id,
 			data: {},
 			date: Date.now(),
 			opened: false,
 			promise: new Deferred,
-		}).set(...arguments, {}) // at least one arg to trigger defaults
+		}).set(this.constructor.defaults, ...arguments)
 
 		// add the created issue into the store
 		store.push(this);
@@ -30,7 +29,7 @@ class Issue {
 		args = args.map(e => (e instanceof Issue) ? e.data : e ).filter(Boolean)
 		
 		if(args.length) 
-			this.data = extend( Object.create(null), this.constructor.defaults, this.data, ...args );
+			this.data = extend( Object.create(null), this.data, ...args );
 
 		return this
 	}
@@ -114,32 +113,35 @@ class Issue {
 	 * @returns this
 	 */
 	static rejectAll(force) {
-
+		
 		for (let issue of this.opened.reverse() )
 			if( issue.data.required && !force ) break;
 			else issue.reject()
 
 		return this
 	}
-}
 
-export default Issue
+	/**
+	 * Rejects last Issue if issue is not required or no `force` parameter is provided.
+	 * @param { Boolean } force force reject `required` issue
+	 * @returns this
+	 */
+	static rejectLast(force) {
+
+		let issue = this.opened.slice(-1)[0];
+
+		if( issue && (!issue.required || force) ) issue.reject();
+
+		return this;
+	}
+}
 
 /**
  * Returns a promise extended with resolve/reject methods
  * so that its state may be triggered from outside
  * @returns Promise
  */
-function Deferred() {
-	let resolve, reject;
+function Deferred(f, d, resolve, reject) {
 
-	return extend(
-		new Promise((rs, rj) => {
-			resolve = rs;
-			reject = rj;
-		}), {
-			resolve,
-			reject
-		}
-	)
+	return d = extend( new Promise( (...a) => [resolve, reject] = a ),  { resolve, reject } ), f && f(d), d;
 }

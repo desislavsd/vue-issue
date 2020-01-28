@@ -23,7 +23,7 @@ function install(Vue, options = {}) {
     Modal.defaults = options.defaults = {
         name: '',
         component: vDialog,
-        props: { reject: 'Cancel'},
+        props: {},
         once: true,
         required: false,
         layout: 'v-modal-layout',
@@ -85,11 +85,12 @@ function dialogAlias({prop = 'message', type = 'alert' } = {}){
 
     return function (val, opts = {}) {
 
-        if (typeof val != 'object') val = {[prop]: val};
+        if (prop == 'model' ? !val.hasOwnProperty(prop) : typeof val != 'object') 
+            val = {[prop]: val};
 
         return this.open({
             ...opts,
-            props: { ...val, type },
+            props: { ...opts.props || {}, ...val, type },
             component: vDialog,
         })
     }

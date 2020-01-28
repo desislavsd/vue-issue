@@ -3,7 +3,13 @@ import App from './App.vue'
 
 import VueIssue from './plugins/issue/index'
 
-Vue.use(VueIssue, {});
+Vue.use(VueIssue, {
+  modal: {
+    defaults: {
+      classes: ['modal-right'],
+    }
+  }
+});
 
 global.$modal = Vue.$modal;
 global.$toast = Vue.$toast;
