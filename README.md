@@ -25,7 +25,7 @@ Vue.use(VueModal, { /* check VueModal options */})
 
 Vue.use(VueToast, { /* check VueToast options */})
 
-Vue.$modal({ 
+Vue.$modal.open({ 
     component: vDialog, 
     props: {message: 'Hello world!'} 
 }).then(console.log)
