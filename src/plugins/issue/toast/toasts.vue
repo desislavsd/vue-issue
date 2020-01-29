@@ -1,7 +1,7 @@
 <template>
     <div @contextmenu.prevent="$toast.rejectAll()">
-        <transition-group v-for="(group, position) in toasts" :key="position" name="toast" class="toasts" :class="'toasts-' + position" tag="div">
-            <component v-for="issue in group" :is="issue.data.component" :key="issue.id" v-show="issue.opened" 
+        <transition-group v-for="pos in positions" :key="pos" :name="$toast.options.animation||'toast'" class="toasts" :class="'toasts-' + pos" tag="div">
+            <component v-for="issue in groups[pos]" :is="issue.data.component" :key="issue.id" v-show="issue.opened" 
                 v-bind="issue.data.props" :toast="issue"
                 v-on="issue.listeners" @[resolveEvent]="issue.resolve($event)" @[rejectEvent]="issue.reject($event)"
                 />
@@ -20,10 +20,11 @@
                 issues: this.$toast.instances,
                 resolveEvent: this.$toast.options.eventsPrefix + 'resolve',
                 rejectEvent: this.$toast.options.eventsPrefix + 'reject',
+                positions: ['top', 'bottom'].map( a => ['left', 'center', 'right'].map( b => `${a}-${b}`) ).flat()
             }
         },
         computed: {
-            toasts(){
+            groups(){
                 return [...this.issues].reverse().reduce( (m, toast) =>{
                     m[toast.data.position] = m[toast.data.position] || [];
                     m[toast.data.position].push(toast)
@@ -40,6 +41,7 @@
         position fixed 
         display flex
         user-select none
+        z-index 99999
         &[class*="toasts-top-"]
             top: $gap
             flex-direction column

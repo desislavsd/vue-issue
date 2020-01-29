@@ -11,7 +11,7 @@
     "*.js",
     "*.md"
   ],
-  "version": "0.0.7",
+  "version": "0.0.8",
   "license": "MIT",
   "private": false,
   "repository": {
@@ -27,7 +27,6 @@
     "build": "vue-cli-service build",
     "build-lib": "vue-cli-service build --target lib --name vue-issue ./src/plugins/issue/index.js",
     "version": "npm version patch",
-    "publish": "npm publish --access public",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
