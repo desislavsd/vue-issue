@@ -4,12 +4,8 @@ class VueModalError extends Error {}
 
 class Modal extends Issue {
     
-    get name(){
-        return this.data.name || this.componentName
-    }
-
     get componentName(){
-        let cmp = this.data.component;
+        let cmp = this.bind.is;
         
         if(typeof cmp == 'string') return cmp
 
@@ -17,7 +13,8 @@ class Modal extends Issue {
     }
 
     static get(name){
-        return this.instances.find( modal => modal.name == name )
+        
+        return this.instances.find( modal => [modal.name, modal.componentName].includes(name) )
     }
 
     /**

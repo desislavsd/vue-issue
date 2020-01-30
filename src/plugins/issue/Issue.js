@@ -5,16 +5,17 @@ export default class Issue {
 
 	constructor() {
 		
-		let store = this.constructor.instances = this.constructor.instances || [], // get the store of all created instances
-			id = this.constructor.index = (this.constructor.index || 0) + 1;
+		let store 	= this.constructor.instances = this.constructor.instances || [], // get the store of all created instances
+			id 		= this.constructor.index 	 = this.constructor.index | 0 + 1;
 
-		Object.assign(this, {
-			id,
-			data: {},
-			date: Date.now(),
-			opened: false,
-			promise: new Deferred,
-		}).set(this.constructor.defaults, ...arguments)
+		this.set( { once: true, required: false, }, this.constructor.defaults, ...arguments, 
+			{
+				id,
+				date: Date.now(),
+				opened: false,
+				promise: new Deferred,
+			}
+		);
 
 		// add the created issue into the store
 		store.push(this);
@@ -26,23 +27,22 @@ export default class Issue {
 	 */
 	set(...args){
 		
-		args = args.map(e => (e instanceof Issue) ? e.data : e ).filter(Boolean)
-		
-		if(args.length) 
-			this.data = extend( Object.create(null), this.data, ...args );
-
-		return this
+		return Object.assign(this, ...args)
 	}
 	/**
 	 * Opens the issue
 	 */
 	open() {
-		this.set(...arguments);
-		this.promise = new Deferred;
-		this.opened = Date.now();
+
+		this.set(...arguments, {
+			promise: new Deferred,
+			opened: Date.now(),
+		})
+
 		this.promise
 			.finally( () => this.opened = false )
-			.finally( () => this.data.once && this.destroy() )
+			.finally( () => this.once && this.destroy() )
+			
 		return this;
 	}
 
