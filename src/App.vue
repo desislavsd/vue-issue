@@ -56,4 +56,8 @@ body
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	color: #2c3e50;
+*
+	padding 0
+	margin 0
+	box-sizing border-box
 </style>

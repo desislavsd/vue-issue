@@ -130,7 +130,7 @@ export default class Issue {
 
 		let issue = this.opened.slice(-1)[0];
 
-		if( issue && (!issue.required || force) ) issue.reject();
+		if( issue ) !issue.required || force && issue.reject();
 
 		return this;
 	}

@@ -50,6 +50,9 @@ export default {
         border-radius 3px
         cursor default
         min-width 7em
+        min-height 2em
+        line-height 0
+        justify-content space-between
         &.toast-info
             background #58a6ca
         &.toast-done
