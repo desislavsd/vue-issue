@@ -1,18 +1,18 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import VueIssue from './plugins/issue/index'
+import { createModalService, createToastService } from './plugins/issue/index'
 
-Vue.use(VueIssue, {
+/* Vue.use(VueIssue, {
   modal: {
     defaults: {
       classes: ['modal-center'],
     }
   }
-});
+}); */
 
-global.$modal = Vue.$modal;
-global.$toast = Vue.$toast;
+global.$modal = Vue.$modal = Vue.prototype.$modal = createModalService();
+global.$toast = Vue.$toast = Vue.prototype.$toast = createToastService();
 
 // eslint-disable-next-line
 Vue.prototype.log = console.log;

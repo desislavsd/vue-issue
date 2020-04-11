@@ -25,7 +25,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "build-lib": "vue-cli-service build --target lib --name vue-issue ./src/plugins/issue/index.js",
+    "build:lib": "vue-cli-service build --target lib --name vue-issue ./src/plugins/issue/index.js",
     "version": "npm version patch",
     "lint": "vue-cli-service lint"
   },
