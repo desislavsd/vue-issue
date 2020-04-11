@@ -1,49 +1,44 @@
+import Vue from 'vue'
 import { inject } from '../utils'
-import Modal from './Modal.js'
-import vModal from './modal.vue'
+import ModalBase from './Modal.js'
 import vModalLayout from './modal-layout.vue'
 import vModals from './modals.vue'
 import vDialog from './dialog.vue'
 
-export { Modal, vModal, vModalLayout, vModals, vDialog }
+export { Modal, vModalLayout, vModals, vDialog }
 
-export default { install }
+export function createModalService( options = {} ){
 
-function install(Vue, options = {}) {
-
-    if(install.installed) return;
+    class Modal extends ModalBase {};
     
-    install.installed = true
-
-    let { defaults = {}, dialog = {} } = options;
-
     Modal.instances = Vue.observable([])
-
-    // Modal constructor defaults
-    Modal.defaults = options.defaults = {
-        name: '',
-        component: vDialog,
-        props: {},
-        once: true,
-        required: false,
-        layout: 'v-modal-layout',
-        classes: ['modal-center'],
-        ...defaults
-    };
-
+    
     // $modal service options
     Modal.options = options = {
-        eventsPrefix: '', // 'modal:'
+        eventsPrefix: '',
         ...options,
+        // modals defaults
+        defaults: Modal.defaults = {
+            name: '',
+            component: vDialog,
+            props: {},
+            listeners: {},
+            once: true,
+            required: false,
+            layout: vModalLayout,
+            classes: ['modal-center'],
+            ...options.defaults || {}
+        },
+        // dialog modal default props
         dialog: {
             resolve: 'OK',
             reject: 'Cancel',
             message: 'Confirm',
             title: '',
-            ...dialog
+            ...options.dialog || {}
         }
     };
-
+    
     // add alert/confirm/prompt aliases of `vDialog` modal
     Object.assign(Modal, {
         dialog(props, ...args){
@@ -63,17 +58,17 @@ function install(Vue, options = {}) {
         }),
     })
 
-    inject({ $modal: Modal })
+    return Modal
+}
 
-    if (typeof document == 'undefined') return;
+export default { install }
 
-    document.addEventListener('keydown', ev => {
+function install(Vue, options = {}) {
 
-        if (ev.which != 27) return;
+    let service = createModalService(options);
 
-        let modal = Modal.opened.slice(-1)[0];
-
-        if (modal && !modal.data.required) modal.reject();
+    inject({
+        [options.serviceName || '$modal']: service
     })
 }
 

@@ -1,39 +1,60 @@
 <template>
     <div class="toast" :class="classes" 
-        @click="$emit($toast.options.eventsPrefix + 'reject')"
+        @click="$emit(`${toast.constructor.options.eventsPrefix}reject`)"
         @mouseenter="toast.timeout(false)"
         @mouseleave="toast.timeout()"
         >
-        <p v-html="opts.message" @click="linkClick"></p>
-        <button v-if="typeof opts.resolve != 'undefined'" @click.stop="$emit($toast.options.eventsPrefix + 'resolve')" v-html="opts.resolve"></button>
-        <button v-if="typeof opts.reject != 'undefined'" @click.stop="$emit($toast.options.eventsPrefix + 'reject')" v-html="opts.reject"></button>
-        <!-- <button v-else class="toast-close" @click="$emit($toast.options.eventsPrefix + 'reject')">&times;</button> -->
+
+        <div>
+            <strong v-if="opts.title">{{opts.title}}</strong>
+            <div class="toast-content" v-html="opts.message" @click="linkClick"></div>
+        </div>
+
+        <button v-for="action in actions" :key="action" 
+            @click.stop="$emit(`toast:${action}`)" 
+            :class="`toast-${action}-btn`"
+            v-html="opts[`${action}Btn`]" 
+            >
+        </button>
+        
     </div>
 </template>
 
 <script>
 import Toast from './Toast'
 export default {
+
     name: 'Toast',
+
     props: {
         toast: { type: Toast, required: true },
     },
+
     computed: {
+
         opts(){
-            return this.toast.data
+            return { ...this.toast }
         },
+        
+        actions(){
+            return ['resolve', 'reject'].filter( action => `${action}Btn` in this.opts )
+        },
+
         classes(){
+
             let { opts } = this;
 
-            return [
-                'toast-' + opts.type,
-                opts.classes || [],
-            ].flat()
+            return [].concat(
+                opts.classes,
+                `toast-${opts.type}`,
+            )
         }
     },
     methods: {
+        
         linkClick(ev){
-            if(ev.target.matches('a,button'))
+            
+            if( ev.target.matches('a,button') )
                 ev.stopPropagation()
         }
     }
@@ -46,13 +67,11 @@ export default {
         color #fff
         display flex
         align-items center
-        padding 0 1em
+        padding .5em 1em .7em
         border-radius 3px
         cursor default
         min-width 7em
-        min-height 2em
-        line-height 0
-        justify-content space-between
+        line-height 1.4
         &.toast-info
             background #58a6ca
         &.toast-done
@@ -61,7 +80,7 @@ export default {
             background #F9A937
         &.toast-error
             background #CA5E58
-        p
+        .toast-content
             flex-grow 1
             &:not(:last-child)
                 padding-right 1em

@@ -1,20 +1,28 @@
+import { Deferred } from "./utils";
 
-let extend = Object.assign;
+class VueIssueError extends Error {}
 
 export default class Issue {
 
 	constructor() {
 		
-		let store = this.constructor.instances = this.constructor.instances || [], // get the store of all created instances
-			id = this.constructor.index = (this.constructor.index || 0) + 1;
+		let store 	= this.constructor.instances =  this.constructor.instances 	|| [], // get the store of all created instances
+			id 		= this.constructor.index 	 = (this.constructor.index 		|| 0 ) + 1;
 
-		Object.assign(this, {
-			id,
-			data: {},
-			date: Date.now(),
-			opened: false,
-			promise: new Deferred,
-		}).set(this.constructor.defaults, ...arguments)
+		this.set(
+			{ 
+				once: true, 
+				required: false, 
+			}, 
+			this.constructor.defaults, 
+			...arguments, 
+			{
+				id,
+				date: Date.now(),
+				opened: false,
+				promise: new Deferred,
+			}
+		);
 
 		// add the created issue into the store
 		store.push(this);
@@ -26,23 +34,22 @@ export default class Issue {
 	 */
 	set(...args){
 		
-		args = args.map(e => (e instanceof Issue) ? e.data : e ).filter(Boolean)
-		
-		if(args.length) 
-			this.data = extend( Object.create(null), this.data, ...args );
-
-		return this
+		return Object.assign(this, ...args)
 	}
 	/**
 	 * Opens the issue
 	 */
 	open() {
-		this.set(...arguments);
-		this.promise = new Deferred;
-		this.opened = Date.now();
+
+		this.set(...arguments, {
+			promise: new Deferred,
+			opened: Date.now(),
+		})
+
 		this.promise
 			.finally( () => this.opened = false )
-			.finally( () => this.data.once && this.destroy() )
+			.finally( () => this.once && this.destroy() )
+			
 		return this;
 	}
 
@@ -51,7 +58,7 @@ export default class Issue {
 	 * @returns Promise
 	 */
 	resolve() {
-		return this.promise.resolve(...arguments),this
+		return this.promise.resolve(...arguments), this
 	}
 
 	/**
@@ -59,6 +66,7 @@ export default class Issue {
 	 * @returns Promise
 	 */
 	reject() {
+
 		return this.promise.reject(...arguments), this
 	}
 
@@ -70,7 +78,7 @@ export default class Issue {
 	}
 
 	/**
-	 * Unregisters the Issue from from it's store
+	 * Unregisters the Issue from it's store
 	 * @return {Issue} this
 	 */
 	destroy() {
@@ -108,40 +116,44 @@ export default class Issue {
 
 	/**
 	 * Rejects all existing Issues starting from the last one.
-     * Stops if issue is required and no `force` parameter is provided.
-     * @param { Boolean } force force reject `required` issues
-	 * @returns this
+	 * @returns Promise
 	 */
-	static rejectAll(force) {
+	static async rejectAll() {
 		
 		for (let issue of this.opened.reverse() )
-			if( issue.data.required && !force ) break;
-			else issue.reject()
+			await issue.reject(...arguments)
 
 		return this
 	}
 
 	/**
-	 * Rejects last Issue if issue is not required or no `force` parameter is provided.
-	 * @param { Boolean } force force reject `required` issue
-	 * @returns this
+	 * Rejects last Issue 
+	 * @returns Promise
 	 */
-	static rejectLast(force) {
+	static async rejectLast() {
 
 		let issue = this.opened.slice(-1)[0];
 
-		if( issue ) !issue.required || force && issue.reject();
+		issue && await issue.reject(...arguments);
 
 		return this;
 	}
-}
 
-/**
- * Returns a promise extended with resolve/reject methods
- * so that its state may be triggered from outside
- * @returns Promise
- */
-function Deferred(f, d, resolve, reject) {
+    /**
+     * Utility method to register new static methods that act 
+	 * as aliases of opening instances with predefined options
+     * @param {String, Object} name or map of {[name]: defaults }
+     * @param {Object} defaults default options 
+     */
+    static reg(name, defaults){
+        
+        if(typeof name == 'object') 
+            return Object.keys(name).forEach( key => this.reg(key, name[key])), this;
 
-	return d = extend( new Promise( (...a) => [resolve, reject] = a ),  { resolve, reject } ), f && f(d), d;
+        if (!name) throw new VueIssueError(`Parameter "name" is required when registering a predefined instance constructor!`)
+
+        this[name] = (...args) => this.open(defaults, ...args) 
+        
+        return this;
+    }
 }

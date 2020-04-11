@@ -1,15 +1,9 @@
 import Issue from '../Issue'
 
-class VueModalError extends Error {}
-
 class Modal extends Issue {
     
-    get name(){
-        return this.data.name || this.componentName
-    }
-
     get componentName(){
-        let cmp = this.data.component;
+        let cmp = this.component;
         
         if(typeof cmp == 'string') return cmp
 
@@ -17,44 +11,8 @@ class Modal extends Issue {
     }
 
     static get(name){
-        return this.instances.find( modal => modal.name == name )
-    }
-
-    /**
-     * Opens an existing modal or creates and opens a new one
-     * @param {String, Object} name Name of an existing modal
-     * @param  {...any} args 
-     */
-    static open(name, ...args){
-
-        if(typeof name != 'string') 
-            return super.open.apply(this, arguments);
-
-        try {
-            return this.get(name).open(...args)
-        } catch (ex){
-            throw new VueModalError(`[VueModal]: Modal called '${name}' doesn't exist!`);
-        }
-    }
-
-    /**
-     * Utility method to register new static methods
-     * that as aliases of opening certain modal
-     * @param {String, Object} name of the method
-     * @param {*} this
-     */
-    static reg(name, defaults){
         
-        if(typeof name == 'object') 
-            return Object.keys(name).forEach( key => this.reg(key, name[key])), this;
-
-        if (!name) throw new VueModalError(`Parameter "name" is required when registering a predefined modal!`)
-
-        this[name] = (...args) => {
-            return this.open(defaults, ...args)
-        }
-        
-        return this;
+        return this.instances.find( instance => [ instance.name, instance.componentName ].includes(name) )
     }
 }
 

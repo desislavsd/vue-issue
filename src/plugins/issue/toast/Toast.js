@@ -2,11 +2,19 @@ import Issue from '../Issue'
 
 export default class Toast extends Issue {
     
+    /**
+     * Extends default `open` method to automatically
+     * run the toast timeout as soon as the toast is opened;
+     */
     open(){
         
         return super.open.apply(this, arguments).timeout();
     }
 
+    /**
+     * Extend default set method to support string 
+     * arguments to be used as a `message` prop;
+     */
     set( ...args ){
         
         args = args.map( message => typeof message != 'string' ? message : { message })
@@ -14,16 +22,20 @@ export default class Toast extends Issue {
         return super.set.call(this, ...args);
     }
 
-    timeout(timeout){
+    /**
+     * Start/Restart toast autorejection timeout
+     * @param {Number} duration Duration in miliseconds
+     */
+    timeout(duration){
 
-        if(timeout === false) 
+        if(duration === false) 
             return clearTimeout(this._timeout), this
 
         if( arguments.length ) 
-            this.set({timeout})
+            this.set({duration})
 
-        if(this.data.timeout && this.data.timeout != Infinity) 
-            this._timeout = setTimeout( this.promise.reject, this.data.timeout );
+        if(this.duration && this.duration != Infinity) 
+            this._timeout = setTimeout( this.promise.reject, this.duration );
 
         return this;
     }
