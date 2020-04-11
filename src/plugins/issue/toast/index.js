@@ -1,43 +1,31 @@
+import Vue from 'vue'
 import { inject } from '../utils'
-import Toast from './Toast'
+import ToastBase from './Toast'
 import vToast from './toast.vue'
 import vToasts from './toasts.vue'
 
-export {
-    Toast,
-    vToast,
-    vToasts,
-}
+export { Toast, vToast, vToasts }
 
-export default {
-    install
-}
+export function createToastService(options = {}) {
 
-function install(Vue, options = {}) {
-
-    if (install.installed) return;
-
-    install.installed = true
-
-    let { defaults = {} } = options;
-
+    class Toast extends ToastBase {};
+    
     Toast.instances = Vue.observable([])
-
-    // Toast constructor defaults
-    Toast.defaults = options.defaults = {
-        component: vToast,
-        position: 'bottom-right', //'bottom-[ left|center|right ] | top-[ left|center|right ]'
-        type: 'default', // info|done|warn|error
-        classes: [],
-        timeout: 3000,
-        ...defaults,
-        once: true,
-    };
-
+    
     // $modal service options
     Toast.options = options = {
-        eventsPrefix: '', // 'toast:'
+        eventsPrefix: '',
         ...options,
+        defaults: Toast.defaults = {
+            component: vToast,
+            position: 'bottom-right', //'bottom-[ left|center|right ] | top-[ left|center|right ]'
+            type: 'default', // info|done|warn|error
+            message: '',
+            classes: [],
+            duration: 3000,
+            once: true,
+            ...options.defaults || {},
+        }
     };
     
     Object.assign(Toast, {
@@ -48,8 +36,17 @@ function install(Vue, options = {}) {
         error: alias('error'),
     })
 
+    return Toast
+}
+
+export default { install }
+
+function install(Vue, options = {}) {
+
+    let service = createToastService(options)
+
     inject({
-        $toast: Toast
+        [options.serviceName || '$toast']: service
     })
 }
 
@@ -57,6 +54,6 @@ function alias(type){
 
     return function () {
         
-        return this.open({ component: vToast, type }, ...arguments)
+        return this.open({ type }, ...arguments )
     }
 }

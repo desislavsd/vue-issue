@@ -6,7 +6,7 @@ import VueIssue from './plugins/issue/index'
 Vue.use(VueIssue, {
   modal: {
     defaults: {
-      classes: ['modal-right'],
+      classes: ['modal-center'],
     }
   }
 });

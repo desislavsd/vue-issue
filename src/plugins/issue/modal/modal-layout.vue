@@ -1,9 +1,9 @@
 <template>
-  <div :class="classes" class="modal" @click="modal.data.required || modal.reject()">
-    <div class="modal-body">
-      <div class="modal-content" @click.stop>
-          <slot v-bind="modal.data.props" v-on="modal.data.listeners" :modal="modal" />
-          <button v-if="!modal.data.required" class="modal-close" @click.stop="modal.reject()">&times;</button>
+  <div :class="classes" class="modal" @mousedown="modal.reject()">
+    <div class="modal-body" @mousedown.stop>
+      <div class="modal-content">
+          <slot />
+          <button class="modal-close" @click.stop="modal.reject()">&times;</button>
       </div>
     </div>
   </div>
@@ -19,23 +19,21 @@ export default {
     modal: {type: Modal, required: true }
   },
 
-  data(){
-    return {
-      resolveEvent: this.$modal.options.eventsPrefix + 'resolve',
-      rejectEvent: this.$modal.options.eventsPrefix + 'reject',
-    }
-  },
-  
   computed: {
+
     classes(){
+      
+      let { modal } = this;
 
-      return [
-        {'modal-opened': this.modal.opened}, 
-        'modal-' + (this.modal.name || 'unknown'),
-        'modal-' + (this.modal.componentName || 'unknown')
-
-      ].concat(this.modal.data.classes || []);
+      // merge all classes and filter unique
+      return [ ...new Set( [].concat(
+        modal.classes,
+        modal.opened && 'modal-opened', 
+        `modal-${modal.name || 'unknown'}`,
+        `modal-${modal.componentName || 'unknown'}`,
+      ))];
     },
+
   }
 }
 </script>
@@ -49,10 +47,10 @@ export default {
     width 100%
     z-index 9999
     overflow hidden
-    background: rgba(0,0,0,.6)
     will-change opacity
-    &.modal-opened
-      overflow-y scroll
+    overflow-y scroll
+    background: rgba(0,0,0,.6)
+    box-sizing border-box
     &.modal-full
       .modal-body
         width 100%
@@ -61,17 +59,20 @@ export default {
     &.modal-right
       justify-content flex-end
       .modal-body
+        position relative
+        z-index 2
         min-height 100%
         max-width 30%
         background #fff
     &.modal-center
+      padding 10% 0
       .modal-body
-        padding 10%
         align-self baseline
-        margin 0 auto
+        margin 0 auto 
     .modal-body
       will-change transform
       perspective 800px
+      max-width 100%
     .modal-content
       position relative
       background #fff;

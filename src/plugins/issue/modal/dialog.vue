@@ -3,7 +3,7 @@
 		<p v-if="opts.title" class="dialog-title">{{ opts.title }}</p>
 		<p v-if="flags.message" v-html="opts.message"></p>
 		
-		<form v-if="flags.prompt" ref="form" @submit.prevent="$emit(resolveEvent, value)">
+		<form v-if="flags.prompt" ref="form" @submit.prevent="$emit(`${service.options.eventsPrefix}resolve`, value)">
 			<slot :dialog="this">
 				<input ref="input" v-bind="model_" v-model.trim="value">
 			</slot>
@@ -11,8 +11,8 @@
 		</form>
 
 		<footer>
-			<button v-if="!flags.alert && opts.reject" tabindex="0" @click="$emit(rejectEvent, data)">{{ opts.reject }}</button>
-			<button tabindex="0" @click="flags.prompt ? $refs.submit.click() : $emit(resolveEvent, data)">{{ opts.resolve }}</button>
+			<button v-if="!flags.alert && opts.reject" tabindex="0" @click="$emit(`${service.options.eventsPrefix}reject`, data)">{{ opts.reject }}</button>
+			<button tabindex="0" @click="flags.prompt ? $refs.submit.click() : $emit(`${service.options.eventsPrefix}resolve`, data)">{{ opts.resolve }}</button>
 		</footer>
 
 	</article>
@@ -29,17 +29,19 @@ export default {
 		model: { },
 		type: String,
 		data: {},
+		modal: {},
 	},
 	data(){
 		
 		return { 
 			value: '', 
 			defaults: this.$modal.options.dialog,
-			resolveEvent: this.$modal.options.eventsPrefix + 'resolve',
-			rejectEvent: this.$modal.options.eventsPrefix + 'reject',
 		}
 	},
 	computed: {
+		service(){
+			return this.modal.constructor
+		},
 		opts(){
             
 			let props = clear(this.$props),

@@ -2,17 +2,19 @@
 	<div id="app">
 		<input type="number" v-model.number="count">
 		name: {{name}} 
-		<button @click="openModal">✎</button>
+		<button @click="openModal()">✎</button>
 		<button @click="$refs.m1.modal.open()">modal 2</button>
 
-		<v-modals />
-		<v-toasts />
+		<v-modals :service="$modal" />
+
+		<v-toasts :service="$toast" />
 		
 		<v-modal v-if="count" ref="m1" :opts="{component: 'bar'}" />
 	</div>
 </template>
 
 <script>
+// eslint-disable
 import { vModals, vModal, vToasts, vDialog } from './plugins/issue'
 
 export default {
@@ -27,9 +29,17 @@ export default {
 	
 	methods: {
 		
-		openModal(){
+		openModal(text = '123'){
+			/* this.$modal.get('foo').open({
+				props: {
+					text
+				}
+			});
+
+			return; */
+
 			this.$modal.open({
-				attrs: {
+				props: {
 					message: 'What is your name?',
 					model: this.name,/* 
 					model: {
@@ -41,8 +51,30 @@ export default {
 						value: this.name
 					}, */
 				}
-			}).then( v => this.name = v )
+			}).then(console.log)
+			// .then( v => this.name = v )
 		}
+	},
+	created(){
+		let component = {
+			props: {text: {default: 'Slim was here!'}, modal: {}},
+			render(h){ return h('div', [this.text]) }
+		};
+
+		this.$modal.create({
+			name: 'foo',
+			component,
+			props: {},
+			// classes: ['modal-center'],
+			once: false,
+			/* reject(){
+				setTimeout(() => {
+					
+					this.promise.reject();
+				}, 3000);
+			} */
+		})
+
 	}
 }
 </script>

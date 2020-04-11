@@ -1,44 +1,34 @@
 <template>
-  <transition-group :name="$modal.options.animation || 'modal'" tag="div" v-if="$modal">
-    <component v-for="modal in validModals" :is="modal.data.layout" :key="modal.id" :modal="modal" v-show="modal.opened">
-      <component :is="modal.data.component" v-bind="modal.data.props" v-on="modal.data.listeners" :modal="modal"
-        @[resolveEvent]="modal.resolve($event)" 
-        @[rejectEvent]="modal.reject($event)"/>
+
+  <transition-group :name="animation" tag="div">
+    
+    <component v-for="modal in issues" :key="modal.id" 
+      :is="modal.layout"
+      :modal="modal"
+      v-show="modal.opened">
+      
+      <component :is="modal.component" v-bind="modal.props" v-on="listeners(modal)" :modal="modal" />
+
     </component>
+    
   </transition-group>
+
 </template>
 
 <script>
-import vModalLayout from './modal-layout'
+
+import mixin from '../list-mixin'
 
 export default {
+
   name: 'Modals',
 
-  components: { vModalLayout },
-  
-  data(){
-    return {
-      modals: this.$modal.instances,
-      resolveEvent: this.$modal.options.eventsPrefix + 'resolve',
-      rejectEvent: this.$modal.options.eventsPrefix + 'reject',
-    }
+  mixins: [mixin],
+
+  props: {
+    animation: { default: 'modal' }, 
+    bodyClass: { default: 'has-modal' }
   },
-
-  computed: {
-    validModals(){
-      return this.modals.filter( e => e.data && e.data.component )
-    },
-    hasOpenedModal(){
-      return this.modals.some( e => e.opened )
-    }
-  },
-
-  watch: {
-    hasOpenedModal(hasOpenedModal){
-
-      document.body.classList[hasOpenedModal ? 'add' : 'remove']('has-modal');
-    }
-  }
 }
 </script>
 
