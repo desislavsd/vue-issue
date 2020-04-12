@@ -45,7 +45,11 @@ $toast.open('Hello world!')
 ```
 ## Issue
 
-Issue is a simple javascript class that both Modal and Toast services extend. The idea is to represent all mentioned obejcts as __Issue__ instances. Each Issue instance has an associated `promise` object, a state property `opened` and optinal additional properties. An Issue may be opened and then either __resolved__ or __rejected__. Here are the constructor options and the class specification:
+Issue is a simple javascript class that both Modal and Toast services extend. 
+Therefore `$modal` and `$toast` are javascript classes ( constructors ) themselves.
+The idea is to represent all mentioned objects as __Issue__ instances. 
+Each Issue instance has an associated `promise` object, a state property `opened` and optional additional properties. 
+An Issue may be opened and then either __resolved__ or __rejected__. Here are the constructor options and the class specification:
 
 ### Constructor options
 | Property | Type    | Default | Description                                                                     |
@@ -63,11 +67,10 @@ Issue is a simple javascript class that both Modal and Toast services extend. Th
 | opened                  | Boolean/Number  | Instance state. Holds opening date if opened and `false` if closed                      |
 | promise                 | Promise         | `promise.resolve` and `promise.reject` are available                                    |
 | date                    | Number          | Issue creation date                                                                     |
-| data                    | Object          | All data passed to the constructor                                                      |
 | _static_ instances        | Array           | List with all created instances that didn't call `.destroy()`                           |
 | _static_ opened           | Array           | List with all currently opened instances.                                               |
 | __Method__             | __Returns__     |                                                                                         |
-| set(...objects)         | `this`          | Merges the provided objects with the current `data` and the defaults                    |
+| set(...objects)         | `this`          | Merges the provided objects with the defaults into the instance                    |
 | open()                  | `this`          | Changes the state to opened and refreshes the promise. Arguments are passed to `.set()` |
 | resolve()               | `this`          | Resolves the promise and goes back to closed state (opened == false).                   |
 | reject()                | `this`          | Rejects the promise and goes back to closed state (opened == false).                    |
@@ -95,7 +98,9 @@ The `VueModal` plugin exposes the `$modal` constructor. It is available at `Vue.
 
 
 ### $modal
-This service is used for rendering Vue components, specified in the `component` prop of the constructor options, in a modal. The rendered component may access the modal instance as a prop `modal` and can resolve or reject it using `modal.resolve()` and `modal.reject()` or by emitting the corresponding events: `$emit('resolve')` & `$emit('reject')`.
+This service is used for rendering Vue components, specified in the `component` prop of the constructor options, in a modal. 
+The rendered component may access the modal instance as a prop `modal` and can resolve or reject it 
+using `modal.resolve()` and `modal.reject()` or by emitting the corresponding events: `$emit('resolve')` & `$emit('reject')`.
 
 #### Constructor options
 | Property  | Type                | Default                   | Description                                                                                               |

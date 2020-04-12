@@ -13,9 +13,35 @@
   <script>
     window.$docsify = {
       name: '@desislavsd/vue-issue',
-      repo: 'https://github.com/desislavsd/vue-issue'
+      repo: 'https://github.com/desislavsd/vue-issue',
+      copyCode: {
+        buttonText: 'Copy'
+      }
     }
   </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code"></script>
+  <style>
+    .docsify-copy-code-button {
+      font-size: 10px;
+      border-radius: 3px;
+      margin: 5px;
+      padding: 0.5em 1em;
+      top: 20px;
+      right: 5px;
+    }
+    code:not(:hover)::-webkit-scrollbar, 
+    code:not(:hover)::-webkit-scrollbar-thumb {
+      visibility: hidden;
+    }
+    code::-webkit-scrollbar {
+      height: 10px;
+    }
+    code::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,.2);
+      background-clip: content-box;
+      border-bottom: 7px solid transparent;
+    }
+  </style>
 </body>
 </html>
