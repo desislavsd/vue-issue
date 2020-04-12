@@ -49,6 +49,7 @@ export default class Issue {
 		this.promise
 			.finally( () => this.opened = false )
 			.finally( () => this.once && this.destroy() )
+			.catch( () => {} )
 			
 		return this;
 	}
@@ -67,7 +68,12 @@ export default class Issue {
 	 */
 	reject() {
 
-		return this.promise.reject(...arguments), this
+		return new Promise( rs => {
+
+			this.promise.finally(rs);
+
+			this.promise.reject(...arguments);
+		})
 	}
 
 	/**
@@ -115,19 +121,20 @@ export default class Issue {
 	}
 
 	/**
-	 * Rejects all existing Issues starting from the last one.
+	 * Rejects all opened Issues starting from the last one 
+	 * stopping on the first that rejects with error.
 	 * @returns Promise
 	 */
 	static async rejectAll() {
 		
-		for (let issue of this.opened.reverse() )
-			await issue.reject(...arguments)
+		while(this.opened.length)
+			await this.rejectLast(...arguments)
 
 		return this
 	}
 
 	/**
-	 * Rejects last Issue 
+	 * Rejects the last opened Issue 
 	 * @returns Promise
 	 */
 	static async rejectLast() {

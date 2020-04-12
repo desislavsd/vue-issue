@@ -37,7 +37,7 @@ export default {
         },
         
         actions(){
-            return ['resolve', 'reject'].filter( action => `${action}Btn` in this.opts )
+            return ['resolve', 'reject'].filter( action => this.opts[`${action}Btn`] )
         },
 
         classes(){

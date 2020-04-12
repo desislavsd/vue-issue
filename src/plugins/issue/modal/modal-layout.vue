@@ -1,9 +1,9 @@
 <template>
-  <div :class="classes" class="modal" @mousedown="modal.reject()">
+  <div :class="classes" class="modal" @mousedown="modal.required || modal.reject()">
     <div class="modal-body" @mousedown.stop>
       <div class="modal-content">
           <slot />
-          <button class="modal-close" @click.stop="modal.reject()">&times;</button>
+          <button v-show="!modal.required" class="modal-close" @click.stop="modal.reject()">&times;</button>
       </div>
     </div>
   </div>
