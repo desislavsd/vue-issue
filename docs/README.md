@@ -56,9 +56,9 @@ An Issue may be opened and then either __resolved__ or __rejected__. Here are th
 |----------|---------|---------|---------------------------------------------------------------------------------|
 | once     | Boolean | `true`    | If `true` removes the issue from the stack after its resolution.                |
 
+
 ?> Any additional properties you pass in the options object are considered meaningful to you and are also added to the instance itself.
 
-<!-- | required | Boolean | `false`   | `rejectAll` static method won't reject this issue without the `force` parameter | -->
 
 ### Properties and methods
 | Property                | Type            | Description                                                                             |
@@ -72,14 +72,14 @@ An Issue may be opened and then either __resolved__ or __rejected__. Here are th
 | __Method__             | __Returns__     |                                                                                         |
 | set(...objects)         | `this`          | Merges the provided objects with the defaults into the instance                    |
 | open()                  | `this`          | Changes the state to opened and refreshes the promise. Arguments are passed to `.set()` |
-| resolve()               | `this`          | Resolves the promise and goes back to closed state (opened == false).                   |
-| reject()                | `this`          | Rejects the promise and goes back to closed state (opened == false).                    |
+| resolve()               | `undefined`          | Resolves the promise and goes back to closed state (opened == false).                   |
+| reject()                | `undefined`      | Rejects the promise and goes back to closed state (opened == false).                    |
 | then()                    | Promise         | Alias for `this.promise.then`                                                           |
 | destroy()               | `this`          | Removes the instance from the stack with all created instances                          |
 | _static_ create(...args)  | instance | Same as `new Issue(...args)`                                                           |
 | _static_ open(...args)    | instance | Same as `new Issue(...args).open()`                                                    |
-| _static async_ rejectAll() | `this`          | Calls `.reject()` on all opened instances that are not destroyed.                       |
-| _static async_ rejectLast() | `this`          | Calls `.reject()` on the last opened instance that is not destroyed.                       |
+| _static async_ rejectAll() | Promise          | Calls `.rejectLast()` __until it fails__ or no opened instances are left.                       |
+| _static async_ rejectLast() | Promise          | Calls `.reject()` on the last opened instance that is not destroyed.                       |
 
 
 ## VueModal
@@ -111,6 +111,7 @@ using `modal.resolve()` and `modal.reject()` or by emitting the corresponding ev
 | listeners | Object              | [check vDialog](#vDialog) | Listeners that will be bound to the component                                                             |
 | layout     | String/Object       | `v-modal-layout`          | Name or definition of the layout component for the modal                                                  |
 | classes   | String/Array/Object | `['modal-center']`        | Classes to be added to the root element of the modal                                                      |
+| required | Boolean | `false`   | If `true` the default modal layout component won't display the close button; Also clicking on the modal overlay won't reject the modal |
 
 #### Instance methods
 
@@ -195,3 +196,61 @@ Vue.$modal.confirm(message|props, options) // sets `type:'confirm'`
 Vue.$modal.prompt(model|props, options) // sets `type:'prompt'`
 ```
 
+## Examples
+
+### Confirm modal rejection
+Often when the end user tries to close a modal you might want to 
+prompt a confirmation dialog and continue the rejection only after
+a successful confirmation. For that purpose we can override the 
+`prototype.reject` method during instance creation 
+since all constructor options are merged into the instance:
+
+```javascript
+let modal = $modal.open({
+    component,
+    props,
+
+    async reject(){
+
+        // ask for confirmation
+        await $modal.confirm();
+
+        // call the default rejection method
+        this.constructor.prototype.reject.apply(this, arguments)
+    }
+})
+
+// a confirmation dialog will pop in any of the following scenarios:
+modal.reject();
+$modal.rejectLast();
+$modal.rejectAll();
+```
+
+We can even make this a default behavior if no `force` parameter is provided to the `reject` method:
+
+```javascript
+let originalReject = $modal.prototype.reject;
+
+$modal.prototype.reject = async function( force = false ){
+
+    // show the confirmation modal if `force != true` 
+    // and if this is not the confirmation modal itself 😜
+    if(!force && this.component.name != 'Dialog')
+        await $modal.confirm()
+    
+    originalReject.apply(this, arguments)
+}
+
+// open any modal
+let modal = $modal.open({/* ... */});
+
+// a confirmation dialog will pop in any of the following scenarios:
+modal.reject();
+$modal.rejectLast();
+$modal.rejectAll();
+
+// a confirmation dialog will NOT pop in any of the following scenarios:
+modal.reject(true);
+$modal.rejectLast(true);
+$modal.rejectAll(true);
+```

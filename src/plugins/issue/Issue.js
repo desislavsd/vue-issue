@@ -56,24 +56,18 @@ export default class Issue {
 
 	/**
 	 * Closes the issue & calls success callbacks
-	 * @returns Promise
 	 */
 	resolve() {
-		return this.promise.resolve(...arguments), this
+
+		this.promise.resolve(...arguments)
 	}
 
 	/**
 	 * Closes the issue & calls error callbacks
-	 * @returns Promise
 	 */
 	reject() {
 
-		return new Promise( rs => {
-
-			this.promise.finally(rs);
-
-			this.promise.reject(...arguments);
-		})
+		this.promise.reject(...arguments)
 	}
 
 	/**

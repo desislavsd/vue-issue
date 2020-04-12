@@ -3,7 +3,7 @@
 		<input type="number" v-model.number="count">
 		name: {{name}} 
 		<button @click="openModal()">✎</button>
-		<button @click="$refs.m1.modal.open()">modal 2</button>
+		<button @click="$toast.rejectAll()">modal 2</button>
 
 		<v-modals :service="$modal" />
 
@@ -30,6 +30,28 @@ export default {
 	methods: {
 		
 		openModal(text = '123'){
+
+
+			let vm = this;
+
+			this.$toast.open({
+				message: 123,
+				duration: Infinity,
+				/* async reject(){
+
+					await vm.$modal.confirm();
+					
+					// if(this.constructor.opened.length < 3) 
+					// 	throw 123// return Promise.reject();
+
+					return this.constructor.prototype.reject.call(this);
+				} */
+			});
+			
+
+			// this.$toast.rejectAll()
+
+			return;
 			/* this.$modal.get('foo').open({
 				props: {
 					text
@@ -67,12 +89,6 @@ export default {
 			props: {},
 			// classes: ['modal-center'],
 			once: false,
-			/* reject(){
-				setTimeout(() => {
-					
-					this.promise.reject();
-				}, 3000);
-			} */
 		})
 
 	}
