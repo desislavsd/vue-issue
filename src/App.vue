@@ -2,24 +2,30 @@
 	<div id="app">
 		<input type="number" v-model.number="count">
 		name: {{name}} 
-		<button @click="openModal()">✎</button>
-		<button @click="$toast.rejectAll()">modal 2</button>
+		<button @click="openToast()">Open toast</button>
+		<button @click="$toast.rejectAll()">Reject all toasts &times;</button>
+		<!-- <button v-if="count" @click="$refs.m1.modal.open()">Open v-modal modal</button> -->
 
 		<v-modals :service="$modal" />
 
 		<v-toasts :service="$toast" />
 		
-		<v-modal v-if="count" ref="m1" :opts="{component: 'bar'}" />
+		<!-- <v-modal v-if="count" ref="m1" :service="$modal" name="Dialog" @resolve="log('resolved')">
+			
+			<template #default="{modal}">
+				<v-dialog v-show="count < 2" type="confirm" message="Hello?" :modal="modal"/>
+			</template>
+		</v-modal> -->
 	</div>
 </template>
 
 <script>
 // eslint-disable
-import { vModals, vModal, vToasts, vDialog } from './plugins/issue'
+import { vModals/* , vModal */, vToasts, vDialog } from './plugins/issue'
 
 export default {
 	name: 'app',
-	components: { vModals, vModal, vToasts, vDialog },
+	components: { vModals/* , vModal */, vToasts, vDialog },
 	data(){
 		return {
 			count: 0,
@@ -29,15 +35,16 @@ export default {
 	
 	methods: {
 		
-		openModal(text = '123'){
+		log: console.log,
 
+		openToast(){
 
 			let vm = this;
 
 			this.$toast.open({
 				message: 123,
 				duration: Infinity,
-				/* async reject(){
+				async reject(){
 
 					await vm.$modal.confirm();
 					
@@ -45,20 +52,19 @@ export default {
 					// 	throw 123// return Promise.reject();
 
 					return this.constructor.prototype.reject.call(this);
-				} */
+				}
 			});
-			
+		},
 
-			// this.$toast.rejectAll()
+		openModal(text = '123'){
 
-			return;
-			/* this.$modal.get('foo').open({
+			this.$modal.get('foo').open({
 				props: {
 					text
 				}
 			});
 
-			return; */
+			return;
 
 			this.$modal.open({
 				props: {
@@ -77,6 +83,7 @@ export default {
 			// .then( v => this.name = v )
 		}
 	},
+
 	created(){
 		let component = {
 			props: {text: {default: 'Slim was here!'}, modal: {}},

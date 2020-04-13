@@ -4,8 +4,9 @@ import ModalBase from './Modal.js'
 import vModalLayout from './modal-layout.vue'
 import vModals from './modals.vue'
 import vDialog from './dialog.vue'
+// import vModal from './modal.vue'
 
-export { Modal, vModalLayout, vModals, vDialog }
+export { Modal, vModalLayout, vModals, /* vModal,  */vDialog }
 
 export function createModalService( options = {} ){
 
