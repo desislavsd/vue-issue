@@ -4,7 +4,7 @@ import ToastBase from './Toast'
 import vToast from './toast.vue'
 import vToasts from './toasts.vue'
 
-export { Toast, vToast, vToasts }
+export { ToastBase, vToast, vToasts }
 
 export function createToastService(options = {}) {
 

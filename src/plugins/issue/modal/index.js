@@ -6,7 +6,7 @@ import vModals from './modals.vue'
 import vDialog from './dialog.vue'
 // import vModal from './modal.vue'
 
-export { Modal, vModalLayout, vModals, /* vModal,  */vDialog }
+export { ModalBase, vModalLayout, vModals, /* vModal,  */vDialog }
 
 export function createModalService( options = {} ){
 
