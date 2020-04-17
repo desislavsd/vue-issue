@@ -140,8 +140,12 @@ The `VueToast` plugin exposes the `$toast` constructor. It is available at `Vue.
 | Property  | Type          |     Default      | Description                                                  |
 | --------- | ------------- | :--------------: | ------------------------------------------------------------ |
 | component | String/Object |      vToast      | Name or definition of component to be used as a toast.  The name must be of globally available components. |
-| position  | String        | `'bottom-right'` | Where to show the toast; Possible values: `'[top|bottom]-[left|right|center]'` |
-| type      | String        |    'default'     | Used for theming only; Possible values: `'default|info|done|warn|error'` |
+| title     | String        |    `''`          | Title |
+| message   | String        |    `''`          | message |
+| position  | String        | `'bottom-right'` | Where to show the toast; Possible values: `'[top/bottom]-[left/right/center]'` |
+| type      | String        |    `'default'`   | Used for theming only; Possible values: `'default|info|done|warn|error'` |
+| resolvebtn | String        |    `''`         | Text for resolve button |
+| rejectbtn | String        |    `''`          | Text for reject button |
 | classes   | Array         |       `[]`       | Additional css classes for the toast compnent                |
 | duration  | Number        |       3000       | Time in *ms* before toast is auto rejected. Use `0`or `Infinity` to disable |
 
