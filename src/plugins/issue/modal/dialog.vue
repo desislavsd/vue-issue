@@ -1,6 +1,6 @@
 <template>
-	<article class="v-dialog">
-		<p v-if="opts.title" class="dialog-title">{{ opts.title }}</p>
+	<article class="vi-dialog">
+		<p v-if="opts.title" class="vi-dialog-title">{{ opts.title }}</p>
 		<p v-if="flags.message" v-html="opts.message"></p>
 		
 		<form v-if="flags.prompt" ref="form" @submit.prevent="$emit(`${service.options.eventsPrefix}resolve`, value)">
@@ -94,24 +94,24 @@ function clear(o){
 </script>
 
 <style lang="stylus">
-	.modal-Dialog
+	.vi-modal-Dialog
 		background none
 		line-height 1.5
-		.modal-body 
+		.vi-modal-body 
 			* 
 				box-sizing border-box
 				margin 0
 				padding 0
-			.modal-content
+			.vi-modal-content
 				min-width 20em
 				padding 1em
 				border-radius 5px
 				box-shadow 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)
-			.modal-close
+			.vi-modal-close
 				display none
 			p
 				margin 0em 0 1em
-			p.dialog-title
+			p.vi-dialog-title
 				font-weight bold
 				margin 0 0 .3em
 			footer

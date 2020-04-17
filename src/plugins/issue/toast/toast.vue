@@ -46,7 +46,7 @@ export default {
 
             return [].concat(
                 opts.classes,
-                `toast-${opts.type}`,
+                `-${opts.type}`,
             )
         }
     },
@@ -72,13 +72,13 @@ export default {
         cursor default
         min-width 7em
         line-height 1.4
-        &.vi-toast-info
+        &.-info
             background #58a6ca
-        &.vi-toast-done
+        &.-done
             background #73B573
-        &.vi-toast-warn
+        &.-warn
             background #F9A937
-        &.vi-toast-error
+        &.-error
             background #CA5E58
         .vi-toast-content
             flex-grow 1

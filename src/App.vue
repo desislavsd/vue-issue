@@ -2,6 +2,7 @@
 	<div id="app">
 		<input type="number" v-model.number="count">
 		name: {{name}} 
+		<button @click="openModal()">Open modal</button>
 		<button @click="openToast()">Open toast</button>
 		<button @click="$toast.rejectAll()">Reject all toasts &times;</button>
 		<!-- <button v-if="count" @click="$refs.m1.modal.open()">Open v-modal modal</button> -->

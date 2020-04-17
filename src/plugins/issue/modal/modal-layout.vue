@@ -34,7 +34,7 @@ export default {
         modal.classes,
         `-${modal.position}`,
         modal.opened && '-opened', 
-        names.map( name => `v-modal-${name}`)
+        names.map( name => `vi-modal-${name}`)
       ))];
     },
 
