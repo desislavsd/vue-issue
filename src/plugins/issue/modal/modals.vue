@@ -26,27 +26,29 @@ export default {
   mixins: [mixin],
 
   props: {
-    animation: { default: 'modal' }, 
-    bodyClass: { default: 'has-modal' }
+    animation: { default: 'vi-modal' }, 
+    bodyClass: { default: 'vi-has-modal' }
   },
 }
 </script>
 
 <style lang="stylus">
-  body.has-modal
+  body.vi-has-modal
     overflow hidden
 
   /* ANIMATIONS */
-  .modal-enter-active, .modal-leave-active
-    &, .modal-body, .modal-content
+  .vi-modal-enter-active, .vi-modal-leave-active
+    &, .vi-modal-body, .vi-modal-content
       transition: transform .2s
 
-  .modal-enter, .modal-leave-to
+  .vi-modal-enter, .vi-modal-leave-to
     opacity: 0;
-    &.modal-center .modal-body
+    &.-center .vi-modal-body
       transform translateY(2em)
-    &.modal-right .modal-body
+    &.-right .vi-modal-body
       transform translateX(100%)
-    &.modal-full .modal-body
+    &.-left .vi-modal-body
+      transform translateX(-100%)
+    &.-full .vi-modal-body
       transform translateY(-10vh)
 </style>

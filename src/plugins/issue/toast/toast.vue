@@ -1,5 +1,5 @@
 <template>
-    <div class="toast" :class="classes" 
+    <div class="vi-toast" :class="classes" 
         @click="$emit(`${toast.constructor.options.eventsPrefix}reject`)"
         @mouseenter="toast.timeout(false)"
         @mouseleave="toast.timeout()"
@@ -7,12 +7,12 @@
 
         <div>
             <strong v-if="opts.title">{{opts.title}}</strong>
-            <div class="toast-content" v-html="opts.message" @click="linkClick"></div>
+            <div class="vi-toast-content" v-html="opts.message" @click="linkClick"></div>
         </div>
 
         <button v-for="action in actions" :key="action" 
             @click.stop="$emit(`toast:${action}`)" 
-            :class="`toast-${action}-btn`"
+            :class="`vi-toast-${action}-btn`"
             v-html="opts[`${action}Btn`]" 
             >
         </button>
@@ -62,7 +62,7 @@ export default {
 </script>
 
 <style lang="stylus">
-    .toast
+    .vi-toast
         background #212121
         color #fff
         display flex
@@ -72,15 +72,15 @@ export default {
         cursor default
         min-width 7em
         line-height 1.4
-        &.toast-info
+        &.vi-toast-info
             background #58a6ca
-        &.toast-done
+        &.vi-toast-done
             background #73B573
-        &.toast-warn
+        &.vi-toast-warn
             background #F9A937
-        &.toast-error
+        &.vi-toast-error
             background #CA5E58
-        .toast-content
+        .vi-toast-content
             flex-grow 1
             &:not(:last-child)
                 padding-right 1em
@@ -95,7 +95,7 @@ export default {
                 opacity 0.7
             &:last-chlid
                 margin-right -0.3em
-        .toast-close
+        .vi-toast-close
             width 1em
             height 1em
             font-size 20px

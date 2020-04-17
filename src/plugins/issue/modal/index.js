@@ -10,7 +10,7 @@ export { ModalBase, vModalLayout, vModals, /* vModal,  */vDialog }
 
 export function createModalService( options = {} ){
 
-    class Modal extends ModalBase {};
+    class Modal extends ModalBase {}
     
     Modal.instances = Vue.observable([])
     
@@ -27,7 +27,8 @@ export function createModalService( options = {} ){
             once: true,
             required: false,
             layout: vModalLayout,
-            classes: ['modal-center'],
+            classes: [],
+            position: 'center', // center | left | right | full
             ...options.defaults || {}
         },
         // dialog modal default props

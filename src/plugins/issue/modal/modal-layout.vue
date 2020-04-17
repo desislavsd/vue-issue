@@ -1,9 +1,9 @@
 <template>
-  <div :class="classes" class="modal" @mousedown="modal.required || modal.reject()">
-    <div class="modal-body" @mousedown.stop>
-      <div class="modal-content">
+  <div :class="classes" class="vi-modal" @mousedown="modal.required || modal.reject()">
+    <div class="vi-modal-body" @mousedown.stop>
+      <div class="vi-modal-content">
           <slot />
-          <button v-show="!modal.required" class="modal-close" @click.stop="modal.reject()">&times;</button>
+          <button v-show="!modal.required" class="vi-modal-close" @click.stop="modal.reject()">&times;</button>
       </div>
     </div>
   </div>
@@ -25,12 +25,16 @@ export default {
       
       let { modal } = this;
 
+      let names = [modal.name, modal.componentName].filter(Boolean);
+
+      names.length || names.push('unknown')
+
       // merge all classes and filter unique
       return [ ...new Set( [].concat(
         modal.classes,
-        modal.opened && 'modal-opened', 
-        `modal-${modal.name || 'unknown'}`,
-        `modal-${modal.componentName || 'unknown'}`,
+        `-${modal.position}`,
+        modal.opened && '-opened', 
+        names.map( name => `v-modal-${name}`)
       ))];
     },
 
@@ -38,7 +42,7 @@ export default {
 }
 </script>
 <style lang="stylus">
-  .modal
+  .vi-modal
     display flex
     position: fixed;
     top 0
@@ -51,36 +55,37 @@ export default {
     overflow-y scroll
     background: rgba(0,0,0,.6)
     box-sizing border-box
-    &.modal-full
-      .modal-body
+    &.-full
+      .vi-modal-body
         width 100%
-      .modal-content
+      .vi-modal-content
         min-height 100vh
-    &.modal-right
+    &.-right
       justify-content flex-end
-      .modal-body
+    &.-right, &.-left
+      .vi-modal-body
         position relative
         z-index 2
         min-height 100%
         max-width 30%
         background #fff
-    &.modal-center
+    &.-center
       padding 10% 0
-      .modal-body
+      .vi-modal-body
         align-self baseline
         margin 0 auto 
-    .modal-body
+    .vi-modal-body
       will-change transform
       perspective 800px
       max-width 100%
-    .modal-content
+    .vi-modal-content
       position relative
       background #fff;
       padding: 3em
       overflow: hidden
       text-align initial
       box-sizing border-box
-    .modal-close
+    .vi-modal-close
       position absolute 
       top 0
       right 0

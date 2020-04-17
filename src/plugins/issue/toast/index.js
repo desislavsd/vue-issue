@@ -8,7 +8,7 @@ export { ToastBase, vToast, vToasts }
 
 export function createToastService(options = {}) {
 
-    class Toast extends ToastBase {};
+    class Toast extends ToastBase {}
     
     Toast.instances = Vue.observable([])
     

@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <transition-group v-for="pos in positions" :key="pos" :name="animation" class="toasts" :class="'toasts-' + pos" tag="div">
+        <transition-group v-for="pos in positions" :key="pos" :name="animation" class="vi-toasts" :class="`-${pos}`" tag="div">
 
             <component v-for="toast in groups[pos]" :is="toast.component" :key="toast.id" 
                 v-bind="toast.props" :toast="toast"
@@ -24,8 +24,8 @@
         mixins: [mixin],
 
         props: {
-            animation: { default: 'toast' }, 
-            bodyClass: { default: 'has-toast' }
+            animation: { default: 'vi-toast' }, 
+            bodyClass: { default: 'vi-has-toast' }
         },
         
         data(){
@@ -48,45 +48,46 @@
 
 <style lang="stylus">
     $gap = 1em
-    .toasts
+    .vi-toasts
         --gap 1em
         position fixed 
         display flex
         user-select none
         z-index 99999
         padding var(--gap)
-        &[class*="toasts-top-"]
+        &[class*="-top-"]
             top 0
             flex-direction column
             margin-top: calc( 0 - var(--gap) / 2 )
-        &[class*="toasts-bottom-"]
+        &[class*="-bottom-"]
             bottom 0
             flex-direction column-reverse
-        &.toasts-bottom-left, &.toasts-top-left
+        &.-bottom-left, &.-top-left
             left 0
             align-items flex-start
-        &.toasts-bottom-center, &.toasts-top-center
+        &.-bottom-center, &.-top-center
             left 50%
             transform translateX(-50%)
             align-items center
-        &.toasts-bottom-right, &.toasts-top-right
+        &.-bottom-right, &.-top-right
             right 0
             align-items flex-end
-        .toast
+        .vi-toast
             margin-top: calc( var(--gap) / 2 )
             transition: transform .2s
             position relative
             &:first-child
                 z-index 2
-    /* ANIMATIONS */
-    .toast-enter-active, .toast-leave-active
-        // &, .toast
-        transition: .2s
 
-    [class*="toasts-top-"]
-        .toast-enter, .toast-leave-to
-            transform: translate(0%,-100%);
-    [class*="toasts-bottom-"]
-        .toast-enter, .toast-leave-to
-            transform: translate(0%,100%);
+        /* ANIMATIONS */
+        .vi-toast-enter-active, .vi-toast-leave-active
+            // &, .vi-toast
+            transition: .2s
+
+        &[class*="-top-"]
+            .vi-toast-enter, .vi-toast-leave-to
+                transform: translate(0%,-100%);
+        &[class*="-bottom-"]
+            .vi-toast-enter, .vi-toast-leave-to
+                transform: translate(0%,100%);
 </style>

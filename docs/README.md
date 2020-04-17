@@ -105,12 +105,13 @@ using `modal.resolve()` and `modal.reject()` or by emitting the corresponding ev
 #### Constructor options
 | Property  | Type                | Default                   | Description                                                                                               |
 |-----------|---------------------|---------------------------|-----------------------------------------------------------------------------------------------------------|
-| name      | String              | ''                        | `.modal-[name]` css class will be added to the root element of the modal layout                              |
+| name      | String              | `''`                       | `.vi-modal-[name]` css class will be added to the root element of the modal layout                              |
 | component | String/Object       | [check vDialog](#vDialog) | Name or definition of component to be opened in modal.  The name must be of globally available components. |
 | props     | Object              | [check vDialog](#vDialog) | Props that will be bound to the component                                                                 |
 | listeners | Object              | [check vDialog](#vDialog) | Listeners that will be bound to the component                                                             |
 | layout     | String/Object       | `v-modal-layout`          | Name or definition of the layout component for the modal                                                  |
-| classes   | String/Array/Object | `['modal-center']`        | Classes to be added to the root element of the modal                                                      |
+| position   | String | `center`  | Determines the modal position/style; one of: `center, left, right, full` |
+| classes   | String/Array/Object | `[]`        | Classes to be added to the root element of the modal (modal-layout)                                      |
 | required | Boolean | `false`   | If `true` the default modal layout component won't display the close button; Also clicking on the modal overlay won't reject the modal |
 
 #### Instance methods
