@@ -144,8 +144,8 @@ The `VueToast` plugin exposes the `$toast` constructor. It is available at `Vue.
 | message   | String        |    `''`          | message |
 | position  | String        | `'bottom-right'` | Where to show the toast; Possible values: `'[top/bottom]-[left/right/center]'` |
 | type      | String        |    `'default'`   | Used for theming only; Possible values: `'default|info|done|warn|error'` |
-| resolvebtn | String        |    `''`         | Text for resolve button |
-| rejectbtn | String        |    `''`          | Text for reject button |
+| resolveBtn| String        |    `''`          | Text for resolve button |
+| rejectBtn | String        |    `''`          | Text for reject button |
 | classes   | Array         |       `[]`       | Additional css classes for the toast compnent                |
 | duration  | Number        |       3000       | Time in *ms* before toast is auto rejected. Use `0`or `Infinity` to disable |
 
