@@ -208,6 +208,27 @@ Vue.$modal.prompt(model|props, options) // sets `type:'prompt'`
 
 ## Examples
 
+### Reject on ESC
+```javascript
+document.addEventListener('keydown', ev => {
+
+    // detect ESC keydown only
+    if( ev.keyCode != 27 ) return;
+
+    let ignore = ['input', 'select', 'textarea', '[contenteditable]'];
+
+    // don't react if an input field is focused
+    if( ev.target.matches( ignore.join() ) ) return;
+
+    // find the service that has open instances;
+    // closing toasts has a higher priority;
+    let service = [$toast, $modal].find( e => e.opened.length );
+
+    // reject the last instance
+    service?.rejectLast();
+})
+```
+
 ### Confirm modal rejection
 Often when the end user tries to close a modal you might want to 
 prompt a confirmation dialog and continue the rejection only after
