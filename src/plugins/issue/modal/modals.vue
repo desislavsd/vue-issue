@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style lang="stylus">
-  body.vi-has-modal
+  .vi-has-modal, .vi-has-modal body
     overflow hidden
 
   /* ANIMATIONS */
