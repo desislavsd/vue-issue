@@ -23,7 +23,8 @@ export default {
 			immediate: true,
 			handler(hasOpened){
 
-				document.body.classList[hasOpened ? 'add' : 'remove'](this.bodyClass);
+				if(typeof document != 'undefined')
+					document.documentElement.classList[hasOpened ? 'add' : 'remove'](this.bodyClass);
 			}
 		}
 	},
