@@ -56,10 +56,21 @@ export default {
 				}
 			});
 		},
-
-		openModal(text = '123'){
+		
+		openModal(text = `
+			<div>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, maxime consectetur doloremque quis fuga expedita quas quo impedit vero earum voluptas ipsum iure iste dolorum perferendis doloribus laudantium? Esse, odio. <br>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, maxime consectetur doloremque quis fuga expedita quas quo impedit vero earum voluptas ipsum iure iste dolorum perferendis doloribus laudantium? Esse, odio. <br>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, maxime consectetur doloremque quis fuga expedita quas quo impedit vero earum voluptas ipsum iure iste dolorum perferendis doloribus laudantium? Esse, odio. <br>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, maxime consectetur doloremque quis fuga expedita quas quo impedit vero earum voluptas ipsum iure iste dolorum perferendis doloribus laudantium? Esse, odio. <br>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, maxime consectetur doloremque quis fuga expedita quas quo impedit vero earum voluptas ipsum iure iste dolorum perferendis doloribus laudantium? Esse, odio. <br>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, maxime consectetur doloremque quis fuga expedita quas quo impedit vero earum voluptas ipsum iure iste dolorum perferendis doloribus laudantium? Esse, odio. <br>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, maxime consectetur doloremque quis fuga expedita quas quo impedit vero earum voluptas ipsum iure iste dolorum perferendis doloribus laudantium? Esse, odio. <br>
+			</div>
+		`){
 
 			this.$modal.get('foo').open({
+				required: false,
 				props: {
 					text
 				}

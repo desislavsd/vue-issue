@@ -1,6 +1,8 @@
 <template>
-  <div :class="classes" class="vi-modal" @mousedown="modal.required || modal.reject()">
-    <div class="vi-modal-body" @mousedown.stop>
+  <div :class="classes" class="vi-modal" 
+    @click="onclick"  
+    @mousedown="mousedownTarget = $event.target">
+    <div ref="body" class="vi-modal-body">
       <div class="vi-modal-content">
           <slot />
           <button v-show="!modal.required" class="vi-modal-close" @click.stop="modal.reject()">&times;</button>
@@ -17,6 +19,12 @@ export default {
   
   props: { 
     modal: {type: Modal, required: true }
+  },
+
+  data(){
+    return {
+      mousedownTarget: false
+    }
   },
 
   computed: {
@@ -38,6 +46,22 @@ export default {
       ))];
     },
 
+  },
+
+  methods: {
+    onclick(ev){
+
+      /**
+       * The click should be ignored if the mousedown and/or click
+       * target element was an element within the body
+       */
+      if(
+        this.$refs.body.contains(this.mousedownTarget) ||
+        this.$refs.body.contains(ev.target)
+      ) return;
+      
+      this.modal.required || this.modal.reject()
+    }
   }
 }
 </script>
