@@ -1,7 +1,9 @@
 <template>
   <div :class="classes" class="vi-modal" 
+    @mousedown="targets.mousedown = $event.target"
+    @mouseup="targets.mouseup = $event.target"
     @click="onclick"  
-    @mousedown="mousedownTarget = $event.target">
+    >
     <div ref="body" class="vi-modal-body">
       <div class="vi-modal-content">
           <slot />
@@ -23,7 +25,10 @@ export default {
 
   data(){
     return {
-      mousedownTarget: false
+      targets: {
+        mousedown: null,
+        mouseup: null,
+      }
     }
   },
 
@@ -50,13 +55,14 @@ export default {
 
   methods: {
     onclick(ev){
-
+      
       /**
-       * The click should be ignored if the mousedown and/or click
-       * target element was an element within the body
+       * The click should be ignored if any of mousedown, mouseup or click
+       * target elements was an element within the body
        */
       if(
-        this.$refs.body.contains(this.mousedownTarget) ||
+        this.$refs.body.contains(this.targets.mousedown) ||
+        this.$refs.body.contains(this.targets.mouseup) ||
         this.$refs.body.contains(ev.target)
       ) return;
       
