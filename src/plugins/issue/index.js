@@ -1,7 +1,7 @@
 import Issue from './Issue'
 import VueModal from './modal'
 import VueToast from './toast'
-import { version } from '@/../package.json'
+import { version } from '../../../package.json'
 export * from './modal'
 export * from './toast'
 
