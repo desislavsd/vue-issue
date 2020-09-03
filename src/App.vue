@@ -45,6 +45,7 @@ export default {
 			this.$toast.open({
 				message: 123,
 				duration: Infinity,
+				resolveBtn: 'some',
 				async reject(){
 
 					await vm.$modal.confirm();

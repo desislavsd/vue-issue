@@ -11,7 +11,7 @@
         </div>
 
         <button v-for="action in actions" :key="action" 
-            @click.stop="$emit(`toast:${action}`)" 
+            @click.stop="toast[action]()" 
             :class="`vi-toast-${action}-btn`"
             v-html="opts[`${action}Btn`]" 
             >
