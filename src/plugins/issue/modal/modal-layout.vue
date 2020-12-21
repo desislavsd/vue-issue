@@ -61,10 +61,11 @@ export default {
        * target elements was an element within the body
        */
       if(
-        this.$refs.body &&
-        this.$refs.body.contains(this.targets.mousedown) ||
-        this.$refs.body.contains(this.targets.mouseup) ||
-        this.$refs.body.contains(ev.target)
+        this.$refs.body && (
+          this.$refs.body.contains(this.targets.mousedown) ||
+          this.$refs.body.contains(this.targets.mouseup) ||
+          this.$refs.body.contains(ev.target)
+        )
       ) return;
       
       this.modal.required || this.modal.reject()
